@@ -1,0 +1,10 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+iam_identity_center_arn.json
+iam_identity_center_groups.json
+organization_accounts.json
+# CDK asset staging directory
+.cdk.staging
+cdk.out
