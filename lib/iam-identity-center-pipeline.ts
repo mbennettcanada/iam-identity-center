@@ -16,6 +16,7 @@ export class IamIdentityCenterPipeline extends cdk.Stack {
           'npm install -g aws-cdk'
         ],
         commands: [
+          'pwd',
           'sh ./tools/get-instance.sh',
           'sh ./tools/get-groups.sh',
           'sh ./tools/get-accounts.sh',
@@ -33,9 +34,9 @@ export class IamIdentityCenterPipeline extends cdk.Stack {
 
     pipeline.pipeline.addToRolePolicy (new PolicyStatement({
       actions: [
-        'sso-admin:ListInstances',
         'identitystore:ListGroups',
-        'organizations:ListAccounts'
+        'organizations:ListAccounts',
+        'sso:ListInstances'
       ],
       resources: ['*'],
     }));
