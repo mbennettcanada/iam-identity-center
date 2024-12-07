@@ -16,9 +16,9 @@ export class IamIdentityCenterPipeline extends cdk.Stack {
           'npm install -g aws-cdk'
         ],
         commands: [
-          'sh ../tools/get-instance.sh',
-          'sh ../tools/get-groups.sh',
-          'sh ../tools/get-accounts.sh',
+          'sh ./tools/get-instance.sh',
+          'sh ./tools/get-groups.sh',
+          'sh ./tools/get-accounts.sh',
           'npm ci',
           'npm run build',
           'npx cdk synth'
