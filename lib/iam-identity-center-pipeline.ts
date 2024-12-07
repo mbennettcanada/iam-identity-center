@@ -2,11 +2,28 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { CodePipeline, CodePipelineSource, CodeBuildStep } from 'aws-cdk-lib/pipelines';
 import { IamIDCStage } from './iam-idc-stage';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
 export class IamIdentityCenterPipeline extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    // Create an IAM role for the CodeBuild project
+    const synthRole = new Role(this, 'SynthRole', {
+      assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),
+    });
+
+    // Add necessary permissions to the role
+    synthRole.addToPolicy(new PolicyStatement({
+      actions: [
+        'sso:ListInstances',
+        'identitystore:ListGroups',
+        'organizations:ListAccounts'
+      ],
+      resources: ['*'],
+    }));
+
+
     const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'cdk-stacksets-pipeline',
       selfMutation: true,
@@ -23,9 +40,9 @@ export class IamIdentityCenterPipeline extends cdk.Stack {
           'npm ci',
           'npm run build',
           'npx cdk synth'
-        ]
-      }
-      )
+        ],
+        role: synthRole
+      })
     });
     const deployWave = pipeline.addWave('DeployChanges');
     const iamIDCStage = new IamIDCStage(this, 'Deploy');    
