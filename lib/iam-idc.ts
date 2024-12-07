@@ -14,7 +14,7 @@ export class IamIDC extends cdk.Stack {
 
         const adminPermissionSet = new CfnPermissionSet(this, 'AdminPermissionSet', {
             instanceArn: identityCenterInstanceArn,
-            name: 'AdministratorAccess',
+            name: 'AdminAccess',
             description: 'Administrator access permission set',
             sessionDuration: 'PT8H', // 8 hours
             managedPolicies: [
